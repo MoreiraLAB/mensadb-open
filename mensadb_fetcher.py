@@ -149,14 +149,14 @@ class generate_outputs:
         """
         pdb_to_fasta(self.simple_name_A)
         psiblast_string_A = self.psiblast_path + " -query " + self.pdb_name + "_" + self.chains[0] + ".fasta" \
-                         + " -evalue 0.005 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
+                         + " -evalue 0.001 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
                          + "output/pssm_" + self.pdb_name + "_" + self.chains[0] + ".txt -out_ascii_pssm output/pssm_" \
                          + self.pdb_name +  "_" + self.chains[0] +  ".pssm -num_threads 16"
         os.system(psiblast_string_A)
 
         pdb_to_fasta(self.simple_name_B)
         psiblast_string_B = self.psiblast_path + " -query " + self.pdb_name + "_" + self.chains[1] + ".fasta" \
-                         + " -evalue 0.005 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
+                         + " -evalue 0.001 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
                          + "output/pssm_" + self.pdb_name + "_" +  self.chains[1] + ".txt -out_ascii_pssm output/pssm_" \
                          + self.pdb_name + "_" + self.chains[1] + ".pssm -num_threads 16"
         os.system(psiblast_string_B)
