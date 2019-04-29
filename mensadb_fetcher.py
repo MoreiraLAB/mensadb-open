@@ -60,7 +60,7 @@ def move_to_folder(folder = "output"):
     """
 
     for files in os.listdir(os.getcwd()):
-        if files.endswith(".tcl") or files.endswith(".pdb") or files.endsiwth(".fasta"):
+        if files.endswith(".tcl") or files.endswith(".pdb") or files.endswith(".fasta"):
             new_file = folder + "/" + files
             os.rename(files, new_file)
 
@@ -72,15 +72,18 @@ class generate_outputs:
         Define commonly used variables
         """
         self.home = os.getcwd()
-        self.autodock = autodock #"MGL=/opt/mgltools_x86_64Linux2_1.5.6/bin\n"
-        self.autodock_2 = autodock_2 #"ADT=/opt/mgltools_x86_64Linux2_1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24\n"
-        self.psiblast_path = psiblast_path #"/services/psiblast"
-        self.nr_path = nr_path #"nr"
+        self.autodock = "MGL=" + autodock + "\n"
+        self.autodock_2 = "ADT=" + autodock_2 + "\n"
+        self.psiblast_path = psiblast_path
+        self.nr_path = nr_path
         self.pdb_path = input_pdb
         self.pdb_name = input_pdb[0:-4]
         self.complex_name = input_pdb[0:-4] + "_complex"
-        self.complex_name_A = self.complex_name + "_A.pdb"
-        self.complex_name_B = self.complex_name + "_B.pdb"
+        self.chains = self.pdb_name.split("_")[1]
+        self.simple_name_A = self.pdb_name + "_" + self.chains[0] + ".pdb"
+        self.simple_name_B = self.pdb_name + "_" + self.chains[1] + ".pdb"
+        self.complex_name_A = self.complex_name + "_" + self.chains[0] + ".pdb"
+        self.complex_name_B = self.complex_name + "_" + self.chains[1] + ".pdb"
 
     def call_dssp(self):
 
@@ -88,22 +91,22 @@ class generate_outputs:
         Call dssp for both chains
         """
         import dssp_features
-        output_name_A = "output/" + self.complex_name + "_A_dssp.txt"
+        output_name_A = "output/" + self.complex_name + "_" + self.chains[0] + "_dssp.txt"
         dssp_command_A = "dssp -i " + self.complex_name_A + " > " + output_name_A
         os.system(dssp_command_A)
-        dssp_chain_A = dssp_features.DSSP_features(self.complex_name_A, 6, pdb_chain = "A")
+        dssp_chain_A = dssp_features.DSSP_features(self.complex_name_A, 6, pdb_chain = self.chains[0])
 
-        output_name_B = "output/" + self.complex_name + "_B_dssp.txt"
+        output_name_B = "output/" + self.complex_name + "_" + self.chains[1] + "_dssp.txt"
         dssp_command_B = "dssp -i " + self.complex_name_B + " > " + output_name_B
         os.system(dssp_command_B)
-        dssp_chain_B = dssp_features.DSSP_features(self.complex_name_B, 6, pdb_chain = "B")
+        dssp_chain_B = dssp_features.DSSP_features(self.complex_name_B, 6, pdb_chain = self.chains[1])
 
         complex_pdb = self.complex_name + ".pdb"
         output_name = "output/" + self.complex_name + "_dssp.txt"
         dssp_command = "dssp -i " + complex_pdb + " > " + output_name
         os.system(dssp_command)
-        dssp_chain_comp_A = dssp_features.DSSP_features(complex_pdb, 6, pdb_chain = "A")
-        dssp_chain_comp_B = dssp_features.DSSP_features(complex_pdb, 6, pdb_chain = "B")
+        dssp_chain_comp_A = dssp_features.DSSP_features(complex_pdb, 6, pdb_chain = self.chains[0])
+        dssp_chain_comp_B = dssp_features.DSSP_features(complex_pdb, 6, pdb_chain = self.chains[1])
         return dssp_chain_A, dssp_chain_B, dssp_chain_comp_A, dssp_chain_comp_B
 
     def write_binana_sh(self, autodock_path, autodock_path_2, command_chain_A, command_chain_B):
@@ -125,13 +128,16 @@ class generate_outputs:
         Prepare pdbqt generationg and run binana
         """
         import process_binana
-        autodock_chain_A = "$MGL/pythonsh $ADT/prepare_ligand4.py -l " + self.complex_name_A + " -A hydrogens -o output/" + self.complex_name + "_A.pdbqt\n"
-        autodock_chain_B = "$MGL/pythonsh $ADT/prepare_receptor4.py -r " + self.complex_name_B + " -A hydrogens -o output/" + self.complex_name + "_B.pdbqt\n"
+        autodock_chain_A = "$MGL/pythonsh $ADT/prepare_receptor4.py -r " + self.complex_name_A \
+                + " -A hydrogens -o output/" + self.complex_name + "_" + self.chains[0] + ".pdbqt\n"
+        autodock_chain_B = "$MGL/pythonsh $ADT/prepare_receptor4.py -r " + self.complex_name_B \
+                + " -A hydrogens -o output/" + self.complex_name + "_" + self.chains[1] + ".pdbqt\n"
         self.write_binana_sh(autodock_path, autodock_path_2, autodock_chain_A, autodock_chain_B)
         os.system("sh pdbqt_generator.sh")
         binana_output = "binana_" + self.pdb_path
-        binana_command = "python services/binana_1_2_0.py -receptor output/" + self.pdb_name + "_complex_B.pdbqt -ligand output/" \
-                            + self.pdb_name + "_complex_A.pdbqt -output_file " + binana_output
+        binana_command = "python services/binana_1_2_0.py -receptor output/" + self.pdb_name \
+                + "_complex_" + self.chains[0] + ".pdbqt -ligand output/" \
+                + self.pdb_name + "_complex_" + self.chains[1] + ".pdbqt -output_file " + binana_output
         os.system(binana_command)
         binana_output = process_binana.retrieve_features(binana_output)
         return binana_output
@@ -141,16 +147,18 @@ class generate_outputs:
         """
         Call psiblast, modify psiblast_path and nr_path according to your own paths
         """
-        pdb_to_fasta(self.complex_name_A)
-        psiblast_string_A = self.psiblast_path + " -query " + self.pdb_name + "_complex_A.fasta" \
-                         + " -evalue 0.001 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
-                         + "output/pssm_" + self.pdb_name + "_A.txt -out_ascii_pssm output/pssm_" + self.pdb_name + "_A.pssm -num_threads 6"
+        pdb_to_fasta(self.simple_name_A)
+        psiblast_string_A = self.psiblast_path + " -query " + self.pdb_name + "_" + self.chains[0] + ".fasta" \
+                         + " -evalue 0.005 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
+                         + "output/pssm_" + self.pdb_name + "_" + self.chains[0] + ".txt -out_ascii_pssm output/pssm_" \
+                         + self.pdb_name +  "_" + self.chains[0] +  ".pssm -num_threads 16"
         os.system(psiblast_string_A)
 
-        pdb_to_fasta(self.complex_name_B)
-        psiblast_string_B = self.psiblast_path + " -query " + self.pdb_name + "_complex_B.fasta" \
-                         + " -evalue 0.001 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
-                         + "output/pssm_" + self.pdb_name + "_B.txt -out_ascii_pssm output/pssm_" + self.pdb_name + "_B.pssm -num_threads 6"
+        pdb_to_fasta(self.simple_name_B)
+        psiblast_string_B = self.psiblast_path + " -query " + self.pdb_name + "_" + self.chains[1] + ".fasta" \
+                         + " -evalue 0.005 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
+                         + "output/pssm_" + self.pdb_name + "_" +  self.chains[1] + ".txt -out_ascii_pssm output/pssm_" \
+                         + self.pdb_name + "_" + self.chains[1] + ".pssm -num_threads 16"
         os.system(psiblast_string_B)
 
     def call_class(self):
@@ -161,7 +169,7 @@ class generate_outputs:
         import generate_class
         return generate_class.generate_output(self.pdb_path)
 
-    def joint_call(self, autodock, autodock_2):
+    def joint_call(self):
 
         """
         Call class, dssp, binana, pssm (jsd) functions and retrieve its values
@@ -172,17 +180,17 @@ class generate_outputs:
         dssp_chain_A, dssp_chain_B, dssp_chain_comp_A, dssp_chain_comp_B = self.call_dssp()
         binana_features = self.call_binana(self.autodock, self.autodock_2)
         self.call_pssm()
-        pssm_output_A = "output/pssm_" + self.pdb_name + "_A.pssm"
+        pssm_output_A = "output/pssm_" + self.pdb_name + "_" + self.chains[0] + ".pssm"
         jsd_values_A = features_pssm.joint_call(pssm_output_A)
-        pssm_output_B = "output/pssm_" + self.pdb_name + "_B.pssm"
+        pssm_output_B = "output/pssm_" + self.pdb_name + "_" + self.chains[1] + ".pssm"
         jsd_values_B = features_pssm.joint_call(pssm_output_B)
-        move_to_folder()
+        #move_to_folder()
         return class_values, dssp_chain_A, dssp_chain_B, dssp_chain_comp_A, dssp_chain_comp_B, binana_features, jsd_values_A, jsd_values_B
-
-'''
+        
 home = os.getcwd()
-autodock = "MGL=/opt/mgltools_x86_64Linux2_1.5.6/bin\n"
-autodock_2 = "ADT=/opt/mgltools_x86_64Linux2_1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24\n"
-psiblast_path = "services/psiblast"
+
+autodock = "/opt/mgltools_x86_64Linux2_1.5.6/bin"
+autodock_2 = "/opt/mgltools_x86_64Linux2_1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24"
+psiblast_path = "psiblast"
 nr_path = "nr"
-'''
+#print(generate_outputs("4j7c_IJ.pdb",autodock, autodock_2, psiblast_path, nr_path).joint_call())

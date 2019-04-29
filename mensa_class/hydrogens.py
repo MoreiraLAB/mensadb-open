@@ -1,5 +1,8 @@
-#conda install -c conda-forge vmd-python
+#!/usr/bin/env python
 
+"""
+Deploy vmd to introduce hydrogens on the structure
+"""
 
 import vmd
 from vmd import molecule
@@ -9,6 +12,9 @@ import sys
 
 def process_vmd_output(input_file_name):
 
+    """
+    Read the output generated from vmd
+    """
     import re
     opened_file = open(input_file_name, "r").readlines()
     no_par_file = opened_file[0].replace("\n","")
@@ -21,6 +27,9 @@ def process_vmd_output(input_file_name):
 
 def detect_chains(input_pdb):
 
+    """
+    Detect chains in the pdb input file
+    """
     opened_pdb = open(input_pdb, "r").readlines()
     chains = []
     for value in opened_pdb:
@@ -33,6 +42,9 @@ def detect_chains(input_pdb):
 
 def add_hydrogens(input_pdb):
 
+    """
+    Generate the code to add hydrogens on vmd
+    """
     output_string = 'mol new ' + input_pdb + '\n' \
      + 'set pdb_name ' + '"' + input_pdb[0:-4] + '"' + '\n' \
      + 'set protein [atomselect top all]' + '\n' \
@@ -83,6 +95,15 @@ def add_hydrogens(input_pdb):
      + 'guesscoord' + '\n' \
      + 'set output_name "${pdb_name}_complex.pdb"' + '\n' \
      + 'writepdb $output_name' + '\n' \
+     + 'mol new "${pdb_name}_complex.pdb"' + '\n' \
+     + 'set pdb_name ' + '"${pdb_name}_complex"' + '\n' \
+     + 'set protein [atomselect top all]' + '\n' \
+     + 'set chains [lsort -unique [$protein get chain]]' + '\n' \
+     + 'foreach chain $chains {' + '\n' \
+     + 'set sel [atomselect top "protein and chain $chain"]' + '\n' \
+     + 'set current_chain_name "${pdb_name}_${chain}.pdb"' + '\n' \
+     + "$sel writepdb $current_chain_name" + '\n' \
+     + '}' + '\n' \
      + 'quit' + '\n' \
      + 'exit'
     opened_file = open("add_H.tcl.tpl", "w")
@@ -90,6 +111,10 @@ def add_hydrogens(input_pdb):
     return output_string
 
 def run_class_pdb(input_pdb_name):
+
+    """
+    Generate the output file and generate the structures with hydrogens
+    """
     add_hydrogens(input_pdb_name)
     evaltcl("play add_H.tcl.tpl")
 

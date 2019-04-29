@@ -62,7 +62,7 @@ def find_sections(input_processed_file, header_sections):
 	return non_empty_sections
 
 
-def read_feat_dict(input_dict, feature_name, starting_point, chain_name_position, SB = False):
+def read_feat_dict(input_dict, feature_name, starting_point, chain_name_position, original_chains = "AB", SB = False):
 
 	import re
 	"""
@@ -78,7 +78,7 @@ def read_feat_dict(input_dict, feature_name, starting_point, chain_name_position
 	for i in range(0,len(input_dict[feature_name])):
 		if input_dict[feature_name][i][0] == 'REMARK':
 			res_list_1 = input_dict[feature_name][i][1].strip("'")
-			if res_list_1[chain_name_position] == "B":
+			if res_list_1[chain_name_position] == original_chains[1]:
 				count_1 = 0
 				for breakpoint in res_list_1:
 					if breakpoint == ")":
@@ -89,7 +89,7 @@ def read_feat_dict(input_dict, feature_name, starting_point, chain_name_position
 					res_dict_B[res_number_1] = 1
 				else:
 					res_dict_B[res_number_1] = res_dict_B[res_number_1] + 1
-			if res_list_1[chain_name_position] == "A":
+			if res_list_1[chain_name_position] == original_chains[0]:
 				count_1 = 0
 				for breakpoint in res_list_1:
 					if breakpoint == ")":
@@ -101,7 +101,7 @@ def read_feat_dict(input_dict, feature_name, starting_point, chain_name_position
 				else:
 					res_dict_A[res_number_1] = res_dict_A[res_number_1] + 1
 			res_list_2 = input_dict[feature_name][i][-1].strip("'")
-			if res_list_2[reverse_start] == "B":
+			if res_list_2[reverse_start] == original_chains[1]:
 				count_2 = 0
 				for breakpoint in res_list_2:
 					if breakpoint == ")":
@@ -112,7 +112,7 @@ def read_feat_dict(input_dict, feature_name, starting_point, chain_name_position
 					res_dict_B[res_number_2] = 1
 				else:
 					res_dict_B[res_number_2] = res_dict_B[res_number_2] + 1
-			if res_list_2[reverse_start] == "A":
+			if res_list_2[reverse_start] == original_chains[0]:
 				count_2 = 0
 				for breakpoint in res_list_2:
 					if breakpoint == ")":
@@ -126,20 +126,6 @@ def read_feat_dict(input_dict, feature_name, starting_point, chain_name_position
 
 	return res_dict_A, res_dict_B
 
-def write_csv_from_dict(input_dict_A, input_dict_B, input_name, feature_name):
-
-	"""
-	Write a csv file for each of teh features
-	"""
-	csv_name_out = "binana_" + input_name + "_" + feature_name + ".csv"
-	with open(csv_name_out, 'a') as csvfile:
-	        writer = csv.writer(csvfile)
-	        for dict_key in input_dict_A.keys():
-	        	writer.writerow([input_name, "A", dict_key, input_dict_A[dict_key]])
-	        for dict_key in input_dict_B.keys():
-	        	writer.writerow([input_name, "B", dict_key, input_dict_B[dict_key]])
-
-
 def retrieve_features(input_file_name):
 
 	"""
@@ -152,20 +138,14 @@ def retrieve_features(input_file_name):
 	different_features = ["pipi_stack", "T_stack", "cat_pi","SB"]
 	opened_file = open_file(input_file_name)
 	feature_sections = find_sections(opened_file, possible_sections)
+	chains = input_file_name.split("_")[2].split(".")[0]
 	complex_name = input_file_name.split("_")[1]
 	features_output = {}
 	for feature in possible_sections:
 		if feature != "SB":
-			dict_A, dict_B = read_feat_dict(feature_sections, feature, 6, 0)
-			#write_csv_from_dict(dict_A, dict_B, complex_name, feature)
+			dict_A, dict_B = read_feat_dict(feature_sections, feature, 6, 0, original_chains = chains)
 			features_output[feature] = [dict_A, dict_B]
 		if feature in different_features:
-			dict_A, dict_B = read_feat_dict(feature_sections, feature, 7, 1, SB = True)
-			#write_csv_from_dict(dict_A, dict_B, complex_name, feature)
+			dict_A, dict_B = read_feat_dict(feature_sections, feature, 7, 1, original_chains = chains, SB = True)
 			features_output[feature] = [dict_A, dict_B]
 	return features_output
-
-
-#file_name = "binana_1a0t_PQ.pdb"
-#retrieve_features(file_name)
-	
