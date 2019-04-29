@@ -1,6 +1,7 @@
+#!/usr/bin/env python
+
 """
 Use this script to assess the interfacial classification of protein residues
-
 """
 
 import os
@@ -43,16 +44,16 @@ def run_generate_classifier(input_pdb):
     interface_command_B = "python mensa_class/interface_B.py " + input_pdb[0:-4] + "_complex.pdb"
     os.system(interface_command_B)
 
-def process_data(input_pdb):
+def process_data(input_pdb, chains):
 
     """
     Process the VMD output files
     """
     interface_A = process_vmd_output("output/interface_output_A")
     interface_B = process_vmd_output("output/interface_output_B")
-    surface_A_name = "output/surface_output_" + input_pdb[0:-4] + "_complex_A"
+    surface_A_name = "output/surface_output_" + input_pdb[0:-4] + "_complex_" + chains[0]
     surface_A = process_vmd_output(surface_A_name)
-    surface_B_name = "output/surface_output_" + input_pdb[0:-4] + "_complex_B"
+    surface_B_name = "output/surface_output_" + input_pdb[0:-4] + "_complex_" + chains[1]
     surface_B = process_vmd_output(surface_B_name)
     return interface_A, surface_A, interface_B, surface_B
 
@@ -87,7 +88,7 @@ def assess_prot(input_processed_pdb, input_features_list, chains_names):
     for row in input_processed_pdb:
         res_number = row[0]
         chain = row[2]
-        if chain == "A":
+        if chain == chains_names[0]:
             if (res_number in input_features_list[0].keys()) and (res_number in input_features_list[1].keys()):
                 output_dict_A[res_number] = "3"
             if (res_number not in input_features_list[0].keys()) and (res_number in input_features_list[1].keys()):
@@ -96,7 +97,7 @@ def assess_prot(input_processed_pdb, input_features_list, chains_names):
                 output_dict_A[res_number] = "0"
             if (res_number in input_features_list[0].keys()) and (res_number not in input_features_list[1].keys()):
                 output_dict_A[res_number] = "0"
-        if chain == "B":
+        if chain == chains_names[1]:
             if (res_number in input_features_list[2].keys()) and (res_number in input_features_list[3].keys()):
                 output_dict_B[res_number] = "3"
             if (res_number not in input_features_list[2].keys()) and (res_number in input_features_list[3].keys()):
@@ -115,7 +116,7 @@ def generate_output(input_file):
     """
     chains_names = input_file.split("_")[1][0:2]
     run_generate_classifier(input_file)
-    processed_info = process_data(input_file)
+    processed_info = process_data(input_file, chains_names)
     processed_pdb = process_pdb(input_file)
     class_results = assess_prot(processed_pdb, processed_info, chains_names)
     return class_results

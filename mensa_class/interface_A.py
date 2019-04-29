@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Deploy vmd to determine interfacial residues of chain A
 """
@@ -13,6 +15,9 @@ output_folder = home + "/output"
 
 def detect_chains(input_pdb):
 
+    """
+    Detect chains in the pdb input file
+    """
     opened_pdb = open(input_pdb, "r").readlines()
     chains = []
     for value in opened_pdb[1:]:
@@ -25,11 +30,17 @@ def detect_chains(input_pdb):
 
 class interface:
 
+    """
+    Interface class object to generate code to run on vmd
+    """
     def __init__(self, pdb_path):
         self.input_pdb_path = pdb_path
 
     def interface_template(self, first_chain = True):
 
+        """
+        Define the template to identify residues below 5A interchain distance
+        """
         both_chains = detect_chains(self.input_pdb_path)
         if first_chain == True:
             chain_A = both_chains[0]
@@ -51,6 +62,9 @@ class interface:
 
     def generate_interface_temp(self, first_chain = True):
 
+        """
+        Write the template file
+        """
         output_name = "output/get_interface.tcl.tpl"
         opened_file = open(output_name, "w")
         writeable_string = interface(self.input_pdb_path).interface_template(first_chain)
@@ -58,11 +72,17 @@ class interface:
 
     def run_read_output_inter(self):
 
+        """
+        Write the output file according to the template measurements
+        """
         output_name = "output/interface_output_A"
         evaltcl('play output/get_interface.tcl.tpl')
 
 def run_class_pdb(input_pdb_name):
 
+    """
+    Deploy the script
+    """
     interface(input_pdb_name).generate_interface_temp()
     interface_chain = interface(input_pdb_name).run_read_output_inter()
 

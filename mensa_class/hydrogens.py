@@ -83,6 +83,15 @@ def add_hydrogens(input_pdb):
      + 'guesscoord' + '\n' \
      + 'set output_name "${pdb_name}_complex.pdb"' + '\n' \
      + 'writepdb $output_name' + '\n' \
+     + 'mol new "${pdb_name}_complex.pdb"' + '\n' \
+     + 'set pdb_name ' + '"${pdb_name}_complex"' + '\n' \
+     + 'set protein [atomselect top all]' + '\n' \
+     + 'set chains [lsort -unique [$protein get chain]]' + '\n' \
+     + 'foreach chain $chains {' + '\n' \
+     + 'set sel [atomselect top "protein and chain $chain"]' + '\n' \
+     + 'set current_chain_name "${pdb_name}_${chain}.pdb"' + '\n' \
+     + "$sel writepdb $current_chain_name" + '\n' \
+     + '}' + '\n' \
      + 'quit' + '\n' \
      + 'exit'
     opened_file = open("add_H.tcl.tpl", "w")

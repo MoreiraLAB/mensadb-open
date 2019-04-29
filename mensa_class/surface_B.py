@@ -1,5 +1,8 @@
-#conda install -c conda-forge vmd-python
+#!/usr/bin/env python
 
+"""
+Script to calculate surface residues of chain B using vmd
+"""
 
 import vmd
 from vmd import molecule
@@ -12,6 +15,9 @@ output_folder = home + "/output"
 
 def detect_chains(input_pdb):
 
+    """
+    Detect chains in the pdb input file
+    """
     opened_pdb = open(input_pdb, "r").readlines()
     chains = []
     for value in opened_pdb[1:]:
@@ -24,6 +30,9 @@ def detect_chains(input_pdb):
         
 class surface:
 
+    """
+    Surface class object to generate code to run on vmd
+    """
     def __init__(self, pdb_path, first = True):
 
         self.input_pdb_path = pdb_path
@@ -35,6 +44,9 @@ class surface:
 
     def surface_template(self, chain):
 
+        """
+        Define the template to identify surface residues distance
+        """
         output_name = output_folder + "/surface_output_" + str(self.input_pdb_path).split("/")[-1][0:-4] + "_" + chain
         output_string = 'mol new ' + self.input_pdb_path + '\n' \
          + 'set allsel [atomselect top "all and chain ' + chain + '"]' + '\n' \
@@ -64,13 +76,19 @@ class surface:
 
     def generate_surface_temp(self):
 
+        """
+        Write the template file
+        """
         tcl_name = output_folder + "/surface_output_" + str(self.input_pdb_path).split("/")[-1][0:-4] + "_" + str(self.current_chain) + ".tcl"
         opened_file = open(tcl_name, "w")
         writeable_string = surface(self.input_pdb_path).surface_template(chain = str(self.current_chain))
         opened_file.write(writeable_string)
 
     def run_read_output_surf(self, remove = False):
-        
+
+        """
+        Write the output file according to the template measurements
+        """
         tcl_name = output_folder + "/surface_output_" + str(self.input_pdb_path).split("/")[-1][0:-4] + "_" + str(self.current_chain) + ".tcl"
         run_command = "play "+ tcl_name
         evaltcl(run_command)
@@ -78,6 +96,9 @@ class surface:
 
 def run_class_pdb(input_pdb_name):
 
+    """
+    Deploy the script
+    """
     surface(input_pdb_name, first = False).generate_surface_temp()
     surface_chain = surface(input_pdb_name, first = False).run_read_output_surf()
 
