@@ -7,6 +7,11 @@ from exampledicr import getdicio
 import numpy as np
 
 def convDic(A, last_aa):
+    '''
+    Converts aminoacid numeration from the numeration contained within
+    the feature outputs to a relative numeration includin the whole
+    protein instead of a numeration by chain.
+    '''
     B = {}
     n = 1
     for entry in A.keys():
@@ -18,6 +23,11 @@ def convDic(A, last_aa):
     return B
 
 def turnRelative(A, chain, posA, posB):
+    '''
+    Converts aminoacid numeration from the numeration contained within
+    the pbd file to a relative numeration according to the interface
+    defined in the literature.
+    '''
     B = {}
     if chain == 'A':
         for q in A.keys():
@@ -28,22 +38,48 @@ def turnRelative(A, chain, posA, posB):
     return B
 
 class Run:
+    '''
+    Runs all dependencies of mensadb and produces a csv file combining
+    all the information. This csv file also includes a scraped version
+    of the pdb file of the protein in analysis.
+    '''
 
-    def __init__(self, pdbid, chains, autodock_1, autodock_2, psiblast, nr):
+    def __init__(self, pdbid, chains, autodock_1, autodock_2, database = 'nr'):
+    '''
+    Defines the starting attributes of the run class.
+    When calling Run, a pdb code (corresponding to the file) and the
+    corresponding chains should be given.
+    '''
         self.pdbid      = pdbid
         self.chains     = chains
         self.file       = self.pdbid + '_' + self.chains + '.pdb'
         self.autodock_1 = autodock_1
         self.autodock_2 = autodock_2
-        self.psiblast   = psiblast
-        self.nr         = nr
+        self.psiblast   = 'psiblast'
+        self.nr         = database
 
     def runer(self):
-        home = os.getcwd()
+        '''
+        Runs all the dependencies and loads them as class attributes.
+        Obtained characteristics:
+        - aminoacid classification
+        - monomer and complex solvent accessible surface areas
+        - interactions at each aminoacid
+        - conservation
+        '''
         protein = generate_outputs(self.file, self.autodock_1, self.autodock_2, self.psiblast, self.nr)
         self.all_features = protein.joint_call()
 
     def getSequence(self):
+        '''
+        Reads the corresponding pdb file, obtaining a relationship
+        between all aminoacids and its characteristics.
+        This method also scraped raw b-factor data.
+        Obtained characteristics:
+        - aminoacid numeration
+        - chains
+        - b-factor
+        '''
         self.runer()
         file = open(self.file, 'r').readlines()
 
@@ -101,6 +137,9 @@ class Run:
                 break
 
     def getFeatures(self):
+        '''
+        Correlates all features and their aminoacid position.
+        '''
         self.getSequence()
 
         self.revposA = {}
@@ -174,6 +213,9 @@ class Run:
         self.jsd = self.all_features[6] + self.all_features[7]
 
     def buildDataFrame(self):
+        '''
+        Builds a dataframe using the data acquired so far.
+        '''
         self.getFeatures()
 
         available_data = [
@@ -428,10 +470,18 @@ class Run:
 
             self.dataframe.loc[num] = pd.Series(row)
 
-    def correction(self, what = 'make'):
+    def correction(self, do = 'make'):
+    '''
+    Applies a correction factor to all features, excluding accessible
+    surface area. This factor was precalculated before, and loaded as 
+    norms. This step can be omited from the pipeline by changin the 'do'
+    variable form "make" to "stay".
+    This method also creates an output csv file containing all the
+    information of interest.
+    '''
         self.buildDataFrame()
         self.dataframe.to_csv('dataframe.csv')
-        if what == 'make':
+        if do == 'make':
             dic = {}
 
             home = os.getcwd()
@@ -483,8 +533,8 @@ class Run:
             f_df.to_csv(out_name)
             self.normalized = f_df
 
-        elif what == 'make':
+        elif do == 'make':
             self.normalized = self.dataframe
 
-prot = Run(sys.argv[1], sys.argv[2], '/opt/mgltools_x86_64Linux2_1.5.6/bin', '/opt/mgltools_x86_64Linux2_1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24', 'psiblast', 'nr')
+prot = Run(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 prot.correction()
