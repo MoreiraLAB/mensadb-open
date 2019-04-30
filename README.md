@@ -14,11 +14,11 @@
 
 To see additional details in how to perform data pre-processing please see our review - "Structural Characterization of Membrane Protein Dimers" published in Methods in Molecular Biology - Protein Supersecondary Structures (https://www.springer.com/us/book/9781493991600).
 
-## A - Obtain all the features using a single pdb file as input.
+### A - Obtain all the features using a single pdb file as input.
 
 - **call_all.py** deploys all the above as well as the need libraries to attain the output files. Run: generate_outputs(your_pdb).joint_call(autodock, autodock_2). The output features are: [class_values, dssp_chain_A, dssp_chain_B, dssp_chain_comp_A, dssp_chain_comp_B, binana_features, jsd_values_A, jsd_values_B]
 
-## B - Obtain each feature individually using a single pdb file as input.
+### B - Obtain each feature individually using a single pdb file as input.
 
 - **dssp_features.py** extract the features from a dssp output file. Also requires the corresponding pdb file. To attain the dssp output file use the DSSP executable. For that, first check if you have dssp binary available in your $PATH. This can be done by running: *which dssp* or *which mkdssp*. If you don't have you can install it using CONDA *conda install -c salilab dssp*. To attain the dssp output file try running: *dssp -i [pdb_name.pdb] > [output_name.txt]* or *mkdssp -i [pdb_name.pdb] > [output_name.txt]*. To attain DSSP features, you can run: *python dssp_features.py*.
 
