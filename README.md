@@ -2,7 +2,8 @@
 
 ## The features extracted for the database of membrane protein dimer analysis can be replicated through this repository.
 
-- INSTALLATION REQUIREMENTS: First you will need to run *python setup.py* to install all the dependencies necessary for feature extraction.
+- INSTALLATION REQUIREMENTS: First you will need to run *python setup.py* to install all the dependencies necessary for feature extraction. Excluded from these dependencies
+are psiblast and autodock tools that need to be installed independently.
 
 - Before feature extraction you should perform a pre-processing of the pdb files. For that you need to:
 		- Trim non-transmembrane residues
@@ -12,7 +13,7 @@
 		- Dimer extraction from the structure Files
 		- Add hydrogens
 
-To see additional details in how to perform data pre-processing please see our review - "Structural Characterization of Membrane Protein Dimers" published in Methods in Molecular Biology - Protein Supersecondary Structures (https://www.springer.com/us/book/9781493991600).
+To see additional details in how to perform data pre-processing please see our review - "Structural Characterization of Membrane Protein Dimers" published in Methods in Molecular Biology - Protein Supersecondary Structures [^1] (https://www.springer.com/us/book/9781493991600).
 
 ### A - Obtain all the features using a single pdb file as input.
 
@@ -60,5 +61,8 @@ To see additional details in how to perform data pre-processing please see our r
 	- non-interface and non-surface: 0
 	- non-interface and surface: 2
 	- interface and surface: 3
+
+References
+[^1]: Preto A.J., Matos-Filipe P., Koukos P.I., Renault P., Sousa S.F., Moreira I.S. (2019) Structural Characterization of Membrane Protein Dimers. In: Kister A. (eds) Protein Supersecondary Structures. Methods in Molecular Biology, vol 1958. Humana Press, New York, NY
 
 Please cite:
