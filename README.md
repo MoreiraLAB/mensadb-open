@@ -18,12 +18,9 @@ To see additional details in how to perform data pre-processing please see our r
 ### A - Obtain all the features using a single pdb file as input.
 
 - **run.py** deploys all the above as well as the need libraries to attain the output files. Run:
-'''
-python run.py [pdbid] [chains]
-'''
+'python run.py [pdbid] [chains]'
 	Example:
-	'''
-	python run.py 1a0t PQ
+	'python run.py 1a0t PQ'
 
 ### B - Obtain each feature individually using a single pdb file as input.
 
