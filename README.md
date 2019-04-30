@@ -2,8 +2,7 @@
 
 ## The features extracted for the database of membrane protein dimer analysis can be replicated through this repository.
 
-- INSTALLATION REQUIREMENTS: First you will need to run *python setup.py* to install all the dependencies necessary for feature extraction. Excluded from these dependencies
-are psiblast and autodock tools that need to be installed independently.
+- INSTALLATION REQUIREMENTS: First you will need to run `python setup.py` in your terminal to install all the dependencies necessary for feature extraction. Excluded from these dependencies are *psiblast* and *autodock tools* that need to be installed independently. Additionally the *non-redundant (nr) database* from NCBI (https://ftp.ncbi.nlm.nih.gov/blast/db/).
 
 - Before feature extraction you should perform a pre-processing of the pdb files. For that you need to:
 		- Trim non-transmembrane residues
@@ -13,7 +12,7 @@ are psiblast and autodock tools that need to be installed independently.
 		- Dimer extraction from the structure Files
 		- Add hydrogens
 
-To see additional details in how to perform data pre-processing please see our review - "Structural Characterization of Membrane Protein Dimers" published in Methods in Molecular Biology - Protein Supersecondary Structures [^1] (https://www.springer.com/us/book/9781493991600).
+To see additional details in how to perform data pre-processing please see our review - "Structural Characterization of Membrane Protein Dimers" published in Methods in Molecular Biology - Protein Supersecondary Structures (https://www.springer.com/us/book/9781493991600).
 
 ### A - Obtain all the features using a single pdb file as input.
 
@@ -24,9 +23,8 @@ To see additional details in how to perform data pre-processing please see our r
 
 ### B - Obtain each feature individually using a single pdb file as input.
 
-- **dssp_features.py** extract the features from a dssp output file. Also requires the corresponding pdb file. To attain the dssp output file use the DSSP executable. For that, first check if you have dssp binary available in your $PATH. This can be done by running: *which dssp* or *which mkdssp*. If you don't have you can install it using CONDA *conda install -c salilab dssp*. To attain the dssp output file try running: *dssp -i [pdb_name.pdb] > [output_name.txt]* or *mkdssp -i [pdb_name.pdb] > [output_name.txt]*. To attain DSSP features, you can run: *python dssp_features.py*.
-
-	  - DSSP index
+- **dssp_features.py** extracts the features from a dssp output file. Also requires the corresponding pdb file. To attain the dssp output file use the DSSP executable. To attain the dssp output file try running: `dssp -i [pdb_name.pdb] > [output_name.txt]`, in windows, or `mkdssp -i [pdb_name.pdb] > [output_name.txt]`, in UNIX based operating systems. To attain DSSP features, you can run `python dssp_features.py`, obtaining the following:
+    - DSSP index
     - Amino acid number
     - Amino acid code
     - Chain
@@ -46,9 +44,9 @@ To see additional details in how to perform data pre-processing please see our r
     - Y-CA
     - Z-CA
 
-- **features_pssm.py** extract the pssm "jsd" features from psi-blast output file. To retrieve the pssm files needed you will require the psiblast local installation, the non-redundant (nr) database and your input file, with this, run: *psiblast -query [fasta_file.fasta] -evalue 0.001 -num_iterations 2 -db [nr] -outfmt 5 -out pssm_output_name.txt -out_ascii_pssm [output_name.pssm] -num_threads 6"*. Running this step can be very time-consuming, depending on the computer and the protein. To attain PSSM "jsd" features output, you can run: *python features_pssm.py*.
+- **features_pssm.py** extracts the pssm "jsd" features from psi-blast output file. To retrieve the pssm files needed you will require the psiblast local installation, the non-redundant (nr) database and your input file, with this, run: `psiblast -query [fasta_file.fasta] -evalue 0.001 -num_iterations 2 -db [nr] -outfmt 5 -out pssm_output_name.txt -out_ascii_pssm [output_name.pssm] -num_threads 6"`. Running this step can be very time-consuming, depending on the computer and the protein. To attain PSSM "jsd" features output, you can run: `python features_pssm.py`.
 
-- **process_binana.py** extract the features from the BINding ANAlyser (BINANA - to download go to http://rocce-vm0.ucsd.edu/data/sw/hosted/binana/#download) output file. To attain the BINANA output, you can run: *python binana_1_2_0.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb*, as stated in the website of this software. To use this command, you will need their binana_1_2_0.py script, as well as the ".pdbqt" input files. To attain the selected features from the BINANA output, you can run: *python process_binana.py*. A single csv will be written for each of the possible features. These features are relate to a dimer, specifically.
+- **process_binana.py** extracts the features from the BINding ANAlyser (BINANA - to download go to http://rocce-vm0.ucsd.edu/data/sw/hosted/binana/#download) output file. To attain the BINANA output, you can run: *python binana_1_2_0.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb*, as stated in the website of this software. To use this command, you will need their binana_1_2_0.py script, as well as the ".pdbqt" input files. To attain the selected features from the BINANA output, you can run: *python process_binana.py*. A single csv will be written for each of the possible features. These features are relate to a dimer, specifically.
 
 	- Below 2.5 Angstrom residues
 	- Below 4 Angstrom residues
