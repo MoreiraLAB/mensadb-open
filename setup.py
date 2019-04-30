@@ -3,6 +3,7 @@ import urllib.request
 
 biopython = 'easy_install -f http://biopython.org/DIST/ biopython'
 numpy = 'python -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose'
+dssp = 'conda install -c salilab dssp'
 pandas = 'python3 -m pip install --upgrade pandas'
 dit = 'pip install dit'
 vmd = 'conda install -c conda-forge vmd-python'

@@ -480,7 +480,6 @@ class Run:
     information of interest.
     '''
         self.buildDataFrame()
-        self.dataframe.to_csv('dataframe.csv')
         if do == 'make':
             dic = {}
 
@@ -529,7 +528,7 @@ class Run:
                     continue
 
             f_df = pd.DataFrame.from_dict(dic).transpose()
-            out_name = self.pdbid + "_test.csv"
+            out_name = self.pdbid + "_mensadb.csv"
             f_df.to_csv(out_name)
             self.normalized = f_df
 
