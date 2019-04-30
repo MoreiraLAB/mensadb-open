@@ -17,7 +17,10 @@ To see additional details in how to perform data pre-processing please see our r
 
 ### A - Obtain all the features using a single pdb file as input.
 
-- **call_all.py** deploys all the above as well as the need libraries to attain the output files. Run: generate_outputs(your_pdb).joint_call(autodock, autodock_2). The output features are: [class_values, dssp_chain_A, dssp_chain_B, dssp_chain_comp_A, dssp_chain_comp_B, binana_features, jsd_values_A, jsd_values_B]
+- **run.py** deploys all the above as well as the need libraries to attain the output files. Run:
+`python run.py [pdbid] [chains]`
+> Example:
+`python run.py 1a0t PQ`
 
 ### B - Obtain each feature individually using a single pdb file as input.
 
