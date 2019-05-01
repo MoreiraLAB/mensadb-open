@@ -64,6 +64,6 @@ To see additional details in how to perform data pre-processing please see our r
 	- interface and surface: 3
 
 References
-[^1]: Preto A.J., Matos-Filipe P., Koukos P.I., Renault P., Sousa S.F., Moreira I.S. (2019) Structural Characterization of Membrane Protein Dimers. In: Kister A. (eds) Protein Supersecondary Structures. Methods in Molecular Biology, vol 1958. Humana Press, New York, NY
+[1]: Preto A.J., Matos-Filipe P., Koukos P.I., Renault P., Sousa S.F., Moreira I.S. (2019) Structural Characterization of Membrane Protein Dimers. In: Kister A. (eds) Protein Supersecondary Structures. Methods in Molecular Biology, vol 1958. Humana Press, New York, NY
 
 Please cite:
