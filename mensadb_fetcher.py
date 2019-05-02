@@ -149,16 +149,16 @@ class generate_outputs:
         """
         pdb_to_fasta(self.simple_name_A)
         psiblast_string_A = self.psiblast_path + " -query " + self.pdb_name + "_" + self.chains[0] + ".fasta" \
-                         + " -evalue 0.001 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
+                         + " -evalue 0.001 -num_iterations 3 -db " + self.nr_path + " -outfmt 5 -out " \
                          + "output/pssm_" + self.pdb_name + "_" + self.chains[0] + ".txt -out_ascii_pssm output/pssm_" \
-                         + self.pdb_name +  "_" + self.chains[0] +  ".pssm -num_threads 16"
+                         + self.pdb_name +  "_" + self.chains[0] +  ".pssm -num_threads 40"
         os.system(psiblast_string_A)
 
         pdb_to_fasta(self.simple_name_B)
         psiblast_string_B = self.psiblast_path + " -query " + self.pdb_name + "_" + self.chains[1] + ".fasta" \
-                         + " -evalue 0.001 -num_iterations 2 -db " + self.nr_path + " -outfmt 5 -out " \
+                         + " -evalue 0.001 -num_iterations 3 -db " + self.nr_path + " -outfmt 5 -out " \
                          + "output/pssm_" + self.pdb_name + "_" +  self.chains[1] + ".txt -out_ascii_pssm output/pssm_" \
-                         + self.pdb_name + "_" + self.chains[1] + ".pssm -num_threads 16"
+                         + self.pdb_name + "_" + self.chains[1] + ".pssm -num_threads 40"
         os.system(psiblast_string_B)
 
     def call_class(self):
@@ -187,10 +187,8 @@ class generate_outputs:
         #move_to_folder()
         return class_values, dssp_chain_A, dssp_chain_B, dssp_chain_comp_A, dssp_chain_comp_B, binana_features, jsd_values_A, jsd_values_B
         
-home = os.getcwd()
-
-autodock = "/opt/mgltools_x86_64Linux2_1.5.6/bin"
-autodock_2 = "/opt/mgltools_x86_64Linux2_1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24"
-psiblast_path = "psiblast"
-nr_path = "nr"
-#print(generate_outputs("4j7c_IJ.pdb",autodock, autodock_2, psiblast_path, nr_path).joint_call())
+#home = os.getcwd()
+#autodock = "/opt/mgltools_x86_64Linux2_1.5.6/bin"
+#autodock_2 = "/opt/mgltools_x86_64Linux2_1.5.6/MGLToolsPckgs/AutoDockTools/Utilities24"
+#psiblast_path = "psiblast"
+#nr_path = "nr"
