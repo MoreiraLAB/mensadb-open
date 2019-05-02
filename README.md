@@ -16,7 +16,7 @@ To see additional details in how to perform data pre-processing, please see our 
 
 ### A - Obtain all the features using a single PDB file as input.
 
-- **run.py** deploys all the below features as well as the needed libraries to attain the output files. To attain all the features run:
+- **run.py** deploys all the below features as well as the needed libraries to attain the output files. It will look for information in the intermediate file **mensadb_fetcher.py**. To attain all the features run:
 `python run.py [pdbid] [chains]`
 > Example:
 `python run.py 1a0t PQ`
