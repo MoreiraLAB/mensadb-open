@@ -2,7 +2,7 @@
 
 ## The features extracted for the database of membrane protein dimer analysis can be replicated through this repository.
 
-- INSTALLATION REQUIREMENTS: First you will need to run `python setup.py` in your terminal to install all the dependencies necessary for feature extraction. Excluded from these dependencies are *psiblast* and *autodock tools* that need to be installed independently. Additionally the *non-redundant (nr) database* from NCBI (https://ftp.ncbi.nlm.nih.gov/blast/db/).
+- INSTALLATION REQUIREMENTS: First you will need to run `python setup.py` in your terminal to install all the dependencies necessary for feature extraction. Excluded from these dependencies are *psiblast* and *autodock tools* that need to be installed independently. Additionally the *non-redundant (nr) database* must be downloaded from NCBI (https://ftp.ncbi.nlm.nih.gov/blast/db/).
 
 - Before feature extraction you should perform a pre-processing of the pdb files. For that you need to:
 		- Trim non-transmembrane residues
