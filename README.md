@@ -23,7 +23,9 @@ To see additional details in how to perform data pre-processing please see our r
 
 ### B - Obtain each feature individually using a single pdb file as input.
 
-- **dssp_features.py** extracts the features from a dssp output file. Also requires the corresponding pdb file. To attain the dssp output file use the DSSP executable and run: `dssp -i [pdb_name.pdb] >[output_name.txt]`, in windows, or `mkdssp -i [pdb_name.pdb] > [output_name.txt]`, in UNIX based operating systems. To attain DSSP features, you can run `python dssp_features.py`, obtaining the following:
+- **dssp_features.py** extracts the features from a dssp output file. Also requires the corresponding pdb file. To attain the dssp output file use the DSSP executable and run: `dssp -i [pdb_name.pdb] >[output_name.txt]`, in windows, or `mkdssp -i [pdb_name.pdb] > [output_name.txt]`, in UNIX based operating systems. 
+
+To attain DSSP features, you can run `python dssp_features.py`, obtaining the following:
     - DSSP index
     - Amino acid number
     - Amino acid code
@@ -44,10 +46,13 @@ To see additional details in how to perform data pre-processing please see our r
     - Y-CA
     - Z-CA
 
-- **features_pssm.py** extracts the pssm "jsd" features from psi-blast output file. To retrieve the pssm files needed you will require the psiblast local installation, the non-redundant (nr) database and your input file, with this, run: `psiblast -query [fasta_file.fasta] -evalue 0.001 -num_iterations 3 -db [nr] -outfmt 5 -out pssm_output_name.txt -out_ascii_pssm [output_name.pssm] -num_threads 6"`. Running this step can be very time-consuming, depending on the computer and the protein. To attain PSSM "jsd" features output, you can run: `python features_pssm.py`.
+- **features_pssm.py** extracts the pssm "jsd" features from psi-blast output file. To retrieve the pssm files needed you will require the psiblast local installation, the non-redundant (nr) database and your input file, with this, run: `psiblast -query [fasta_file.fasta] -evalue 0.001 -num_iterations 3 -db [nr] -outfmt 5 -out pssm_output_name.txt -out_ascii_pssm [output_name.pssm] -num_threads 6"`. Running this step can be very time-consuming, depending on the computer and the protein. 
 
-- **process_binana.py** extracts the features from the BINding ANAlyser (BINANA - to download go to http://rocce-vm0.ucsd.edu/data/sw/hosted/binana/#download) output file. To attain the BINANA output, you can run: *python binana_1_2_0.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb*, as stated in the website of this software. To use this command, you will need their binana_1_2_0.py script, as well as the ".pdbqt" input files. To attain the selected features from the BINANA output, you can run: *python process_binana.py*. A single csv will be written for each of the possible features. These features are relate to a dimer, specifically.
+To attain PSSM "jsd" features output, you can run: `python features_pssm.py`.
 
+- **process_binana.py** extracts the features from the BINding ANAlyser output file (BINANA - to download go to http://rocce-vm0.ucsd.edu/data/sw/hosted/binana/#download). To attain the BINANA output, you can run: `python binana_1_2_0.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb`, as stated in the website of this software. To use this command, you will need their binana_1_2_0.py script, as well as the ".pdbqt" input files. 
+
+To attain the selected features from the BINANA output, you can run: `python process_binana.py`. A single csv will be written for each of the possible features. These features are relate to a dimer, specifically.
 	- Below 2.5 Angstrom residues
 	- Below 4 Angstrom residues
 	- Hydrogen Bonds
