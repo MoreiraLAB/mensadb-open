@@ -23,7 +23,7 @@ To see additional details in how to perform data pre-processing please see our r
 
 ### B - Obtain each feature individually using a single pdb file as input.
 
-- **dssp_features.py** extracts the features from a dssp output file. Also requires the corresponding pdb file. To attain the dssp output file use the DSSP executable. To attain the dssp output file try running: `dssp -i [pdb_name.pdb] > [output_name.txt]`, in windows, or `mkdssp -i [pdb_name.pdb] > [output_name.txt]`, in UNIX based operating systems. To attain DSSP features, you can run `python dssp_features.py`, obtaining the following:
+- **dssp_features.py** extracts the features from a dssp output file. Also requires the corresponding pdb file. To attain the dssp output file use the DSSP executable and run: `dssp -i [pdb_name.pdb] >[output_name.txt]`, in windows, or `mkdssp -i [pdb_name.pdb] > [output_name.txt]`, in UNIX based operating systems. To attain DSSP features, you can run `python dssp_features.py`, obtaining the following:
     - DSSP index
     - Amino acid number
     - Amino acid code
