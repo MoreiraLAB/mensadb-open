@@ -16,7 +16,7 @@ To see additional details in how to perform data pre-processing please see our r
 
 ### A - Obtain all the features using a single pdb file as input.
 
-- **run.py** deploys all the above as well as the need libraries to attain the output files. Run:
+- **run.py** deploys all the below features as well as the needed libraries to attain the output files. To attain all the features run:
 `python run.py [pdbid] [chains]`
 > Example:
 `python run.py 1a0t PQ`
@@ -62,8 +62,8 @@ To see additional details in how to perform data pre-processing please see our r
 	- non-interface and surface: 2
 	- interface and surface: 3
 
-References
+**References**
 
-Preto A.J., Matos-Filipe P., Koukos P.I., Renault P., Sousa S.F., Moreira I.S. (2019) Structural Characterization of Membrane Protein Dimers. In: Kister A. (eds) Protein Supersecondary Structures. Methods in Molecular Biology, vol 1958. Humana Press, New York, NY
+- Preto A.J., Matos-Filipe P., Koukos P.I., Renault P., Sousa S.F., Moreira I.S. (2019) Structural Characterization of Membrane Protein Dimers. In: Kister A. (eds) Protein Supersecondary Structures. Methods in Molecular Biology, vol 1958. Humana Press, New York, NY
 
-Please cite:
+**Please cite**
