@@ -51,9 +51,9 @@ To see additional details in how to perform data pre-processing please see our r
 	- Below 4 Angstrom residues
 	- Hydrogen Bonds
 	- Hydrophobic contacts
-	- Pi-pi bond stack
+	- Pi-Pi bond stack
 	- T - stack
-	- Cation - pi interaction
+	- Cation - Pi interaction
 	- Salt-bridges
 
 - **generate_class.py** uses vmd to extract the interfacial and surface classification for each residue. Makes use of 5 other scripts that are located on the "mensa_class" folder. To use these scripts, it is required the installation of python based vmd. This can be done with: *conda install -c conda-forge vmd-python*. The whole code can be run with *generate_outputs(input_pdb).joint_call(autodock, autodock_2)*. Check the path list and replace with your locations. The possible classes are:
