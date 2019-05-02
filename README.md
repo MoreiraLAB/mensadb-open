@@ -4,13 +4,13 @@
 
 - INSTALLATION REQUIREMENTS: First you will need to run `python setup.py` in your terminal to install all the dependencies necessary for feature extraction. Excluded from these dependencies are *psiblast* and *autodock tools* that need to be installed independently. Additionally the *non-redundant (nr) database* must be downloaded from NCBI (https://ftp.ncbi.nlm.nih.gov/blast/db/).
 
-- Before feature extraction you should perform a pre-processing of the pdb files. For that you need to:
-		- Trim non-transmembrane residues
-		- Remove heteroatoms
-		- Mutate exotic amino acids
-		- Model incomplete structures
-		- Dimer extraction from the structure Files
-		- Add hydrogens
+- Before feature extraction you should perform a PRE-PROCESSING of the pdb files. For that you need to:
+	- Trim non-transmembrane residues
+	- Remove heteroatoms
+	- Mutate exotic amino acids
+	- Model incomplete structures
+	- Dimer extraction from the structure Files
+	- Add hydrogens
 
 To see additional details in how to perform data pre-processing please see our review - "Structural Characterization of Membrane Protein Dimers" published in Methods in Molecular Biology - Protein Supersecondary Structures (https://www.springer.com/us/book/9781493991600).
 
