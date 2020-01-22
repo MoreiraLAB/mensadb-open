@@ -68,4 +68,4 @@ To see additional details in how to perform data pre-processing, please see our 
 
 **Please cite**
 
-- Matos-Filipe P., Preto A.J., Koukos P.I., Mourão J., Bonvin A.M.J.J., Moreira I.S. (2019) MENSADB: A Thorough Structural Analysis of Membrane Protein Dimers. Available in arXiv:1902.02321 (https://arxiv.org/pdf/1902.02321.pdf) 
+- Matos-Filipe P., Preto A.J., Koukos P.I., Mourão J., Bonvin A.M.J.J., Moreira I.S. MENSADB: A Thorough Structural Analysis of Membrane Protein Dimers. Available in arXiv:1902.02321 (https://arxiv.org/pdf/1902.02321.pdf) 
